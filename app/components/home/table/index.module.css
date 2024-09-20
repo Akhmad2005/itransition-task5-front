@@ -1,0 +1,27 @@
+.home-table{
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: 100%;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	padding: 12px 24px;
+	backdrop-filter: blur(5px);
+	/* height: 100%; */
+}
+
+.home-table-body{
+	/* flex: 100% 1 1; */
+	/* height: 100%; */
+	/* overflow: auto;
+	border-radius: 8px; */
+}
+
+.home-table-toolbar-title{
+	color: rgba(255, 255, 255, 0.88);
+}
+
+.divider{
+	border: 0.5px solid rgb(255, 255, 255, 0.4);
+	height: 100%;
+}
