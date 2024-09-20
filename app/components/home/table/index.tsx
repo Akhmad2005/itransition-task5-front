@@ -98,7 +98,7 @@ const HomeTable = () => {
 		});
 		
 		try {
-			let res = await fetch(`http://localhost:7777/generate?${params.toString()}`)
+			let res = await fetch(`https://itransition-task5-back.vercel.app/generate?${params.toString()}`)
 			let data = await res.json()
 			if (res && res.ok) {
 				setData(data);
@@ -137,7 +137,7 @@ const HomeTable = () => {
 		});
 		
 		try {
-			let res = await fetch(`http://localhost:7777/export?${params.toString()}`)
+			let res = await fetch(`https://itransition-task5-back.vercel.app/export?${params.toString()}`)
 			if (res && res.ok) {
 				let data = await res.blob();
 				openCsvInNewTab(data)
