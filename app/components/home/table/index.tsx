@@ -51,8 +51,8 @@ const HomeTable = () => {
 	const [dataEnd, setDataEnd] = useState<boolean>(false);
 	const [dataLoading, setDataLoading] = useState<boolean>(false);
 	const [seed, setSeed] = useState<number>();
-	let scrollDataLoading = false;
-	let dataLimit = 20;
+	const scrollDataLoading = useRef(false); 
+	const dataLimit = useRef(10);
 	const isMounted = useRef(false)
 	const languageOptions = Object.entries(Language).map(([label, value]) => ({
     label,
@@ -91,7 +91,7 @@ const HomeTable = () => {
 	const fetchList = async () => {
 		setDataLoading(true);
 		const params = new URLSearchParams({
-			limit: String(dataLimit),
+			limit: String(dataLimit.current),
 			region: String(selectedLanguage),
 			errors: String(mistakesInputValue),
 			seed: String(seed),
@@ -130,7 +130,7 @@ const HomeTable = () => {
 	const epxortToCSV = async () => {
 		setDataLoading(true);
 		const params = new URLSearchParams({
-			limit: String(dataLimit),
+			limit: String(dataLimit.current),
 			region: String(selectedLanguage),
 			errors: String(mistakesInputValue),
 			seed: String(seed),
@@ -153,18 +153,18 @@ const HomeTable = () => {
 	const handleScroll = async (e: any) => {
 		if (e) {
 			const { scrollTop, scrollHeight, clientHeight } = e;
-			if (scrollTop + clientHeight >= scrollHeight - 1 && !scrollDataLoading && !dataEnd) {
-				scrollDataLoading = true;
-				dataLimit += 10;
+			if (scrollTop + clientHeight >= scrollHeight - 1 && !scrollDataLoading.current && !dataEnd) {
+				scrollDataLoading.current = true;
 				setDataLoading(true);
 				setTimeout(() => {
-					fetchList();
+					dataLimit.current += 10;
+					// fetchList();
 					setDataLoading(false);
 				}, 1500);
 			}
 		}
 		setTimeout(() => {
-			scrollDataLoading = false;
+			scrollDataLoading.current = false;
 		}, 10);
 	};
 
@@ -174,25 +174,7 @@ const HomeTable = () => {
 		} else {
 			isMounted.current = true;
 		} 
-	}, [mistakesInputValue]);
-
-	useEffect(() => {
-		if (isMounted.current) {
-			fetchList();
-		} else {
-			isMounted.current = true;
-		} 
-	}, [seed]);
-
-	useEffect(() => {
-		if (selectedLanguage) {
-			if (isMounted.current) {
-				fetchList();
-			} else {
-				isMounted.current = true;
-			} 
-		}
-	}, [selectedLanguage]);
+	}, [seed, mistakesInputValue, selectedLanguage, dataLimit.current]);
 
 	useEffect(() => {
 		const tableBody = document.querySelector('.ant-table-body')
